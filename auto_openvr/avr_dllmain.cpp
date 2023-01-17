@@ -346,28 +346,30 @@ extern "C"
 			switch (axis)
 			{
 			case 0:
-				return left_state.rAxis[1].x;
-				break;
-			case 1:
-				return right_state.rAxis[1].x;
-				break;
-			case 2:
-				return left_state.rAxis[2].x;
-				break;
-			case 3:
-				return right_state.rAxis[2].x;
-				break;
-			case 4:
 				return left_state.rAxis[0].x;
 				break;
-			case 5:
+			case 1:
 				return right_state.rAxis[0].x;
 				break;
-			case 6:
+			case 2:
 				return left_state.rAxis[0].y;
 				break;
-			case 7:
+			case 3:
 				return right_state.rAxis[0].y;
+				break;
+
+			case 4:
+				return left_state.rAxis[1].x;
+				break;
+			case 5:
+				return right_state.rAxis[1].x;
+				break;
+
+			case 6:
+				return left_state.rAxis[2].x;
+				break;
+			case 7:
+				return right_state.rAxis[2].x;
 				break;
 			case 8:
 				return left_state.rAxis[2].y;
@@ -403,28 +405,30 @@ extern "C"
 			switch (axis)
 			{
 			case 0:
-				return hitThreshold(left_state.rAxis[1].x, left_last_state.rAxis[1].x, value);
-				break;
-			case 1:
-				return hitThreshold(right_state.rAxis[1].x, right_last_state.rAxis[1].x, value);
-				break;
-			case 2:
-				return hitThreshold(left_state.rAxis[2].x, left_last_state.rAxis[2].x, value);
-				break;
-			case 3:
-				return hitThreshold(right_state.rAxis[2].x, right_last_state.rAxis[2].x, value);
-				break;
-			case 4:
 				return hitThreshold(left_state.rAxis[0].x, left_last_state.rAxis[0].x, value);
 				break;
-			case 5:
+			case 1:
 				return hitThreshold(right_state.rAxis[0].x, right_last_state.rAxis[0].x, value);
 				break;
-			case 6:
+			case 2:
 				return hitThreshold(left_state.rAxis[0].y, left_last_state.rAxis[0].y, value);
 				break;
-			case 7:
+			case 3:
 				return hitThreshold(right_state.rAxis[0].y, right_last_state.rAxis[0].y, value);
+				break;
+
+			case 4:
+				return hitThreshold(left_state.rAxis[1].x, left_last_state.rAxis[1].x, value);
+				break;
+			case 5:
+				return hitThreshold(right_state.rAxis[1].x, right_last_state.rAxis[1].x, value);
+				break;
+			
+			case 6:
+				return hitThreshold(left_state.rAxis[2].x, left_last_state.rAxis[2].x, value);
+				break;
+			case 7:
+				return hitThreshold(right_state.rAxis[2].x, right_last_state.rAxis[2].x, value);
 				break;
 			case 8:
 				return hitThreshold(left_state.rAxis[2].y, left_last_state.rAxis[2].y, value);

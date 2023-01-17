@@ -3,6 +3,11 @@
 ;// DO NOT MODIFY
 ;///////////////////////////////////////////////////////////////////////////////
 
+; Misc defines
+LeftHand  := 0
+RightHand := 1
+Head := 2
+
 ; Button enums
 global ovrA         := 1       
 global ovrB         := 2
@@ -23,39 +28,27 @@ global indexB       := 2
 global indexX       := 400
 global indexY       := 200
 
-
-; Capacitive touch sensors
-; global ovrTouch_RThumbRest     := 8
-; global ovrTouch_RIndexTrigger  := 10
-; global ovrTouch_LThumbRest     := 800
-; global ovrTouch_LIndexTrigger  := 1000
-
-; Misc defines
-LeftHand  := 0
-RightHand := 1
-Head := 2
-
-; Axis defines
-AxisIndexTriggerLeft := 0
-AxisIndexTriggerRight := 1
-AxisHandTriggerLeft := 2     
-AxisHandTriggerRight := 3   
-AxisXLeft := 4
-AxisXRight := 5
-AxisYLeft := 6
-AxisYRight := 7
-WmrAxisXLeft := 2
-WmrAxisXRight := 3
-WmrAxisYLeft := 8
-WmrAxisYRight := 9
+; Global Axis defines
+global AxisIndexTriggerLeft
+global AxisIndexTriggerRight
+global AxisHandTriggerLeft 
+global AxisHandTriggerRight
+global AxisXLeft
+global AxisXRight
+global AxisYLeft
+global AxisYRight
+global AxisXPadLeft    
+global AxisXPadRight
+global AxisYPadLeft
+global AxisYPadRight
 
 ; vJoy defines
-HID_USAGE_X   := 0x30	; Left gamepad thumbstick x
-HID_USAGE_Y	  := 0x31	; Left gamepad thumbstick y
-HID_USAGE_Z	  := 0x32	; Left gamepad trigger
-HID_USAGE_RX  := 0x33	; Right gamepad thumbstick x
-HID_USAGE_RY  := 0x34	; Right gamepad thumbstick y
-HID_USAGE_RZ  := 0x35	; Right gamepad trigger
+HID_USAGE_X   := 0x30
+HID_USAGE_Y	  := 0x31
+HID_USAGE_Z	  := 0x32
+HID_USAGE_RX  := 0x33
+HID_USAGE_RY  := 0x34
+HID_USAGE_RZ  := 0x35
 HID_USAGE_SL0 := 0x36
 HID_USAGE_SL1 := 0x37
 HID_USAGE_WHL := 0x38
@@ -104,7 +97,14 @@ Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJ
 
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
-InitOpenVR()
+; Init OpenVR
+; Use specific HMDmodel to initialize correct axis and buttons assignment:
+; 0 = Oculus
+; 1 = Index
+; 2 = WMR touchpad gen 1
+; 3 = WMR button gen 2 (HP)
+; 4 = HTC Vive Wands
+InitOpenVR(HMDmodel)
 {
 	global Func_initOpenvr
 	result := DllCall(Func_initOpenVR, "UInt")
@@ -115,6 +115,49 @@ InitOpenVR()
 	}
 	Else
 	{
+		if (HMDmodel = 0) ; Oculus touch
+		{
+			AxisIndexTriggerLeft := 4    ; 1.x
+			AxisIndexTriggerRight := 5   ; 1.x 
+			AxisHandTriggerLeft := 6     ; 2.x     
+			AxisHandTriggerRight := 7    ; 2.x 
+			
+			AxisXLeft := 0               ; 0.x
+			AxisXRight := 1              ; 0.x
+			AxisYLeft := 2               ; 0.y
+			AxisYRight := 3              ; 0.y
+
+		}
+		else if (HMDmodel = 1) ; Valve Index
+		{}
+		else if (HMDmodel = 2) ; WMR gen 1 w/touchpad
+		{
+			AxisIndexTriggerLeft := 4    ; 1.x
+			AxisIndexTriggerRight := 5   ; 1.x 
+
+			AxisXLeft := 6               ; 2.x
+			AxisXRight := 7              ; 2.x
+			AxisYLeft := 8               ; 2.y
+			AxisYRight := 9              ; 2.y
+			
+			AxisXPadLeft := 0            ; 0.x    
+			AxisXPadRight := 1           ; 0.x
+			AxisYPadLeft := 2            ; 0.y
+			AxisYPadRight := 3           ; 0.y
+		}
+		else if (HMDmodel = 3)  ; WMR gen 2 w/stick only
+		{}
+		else if (HMDmodel = 4) ; VIVE Wands
+		{
+			AxisIndexTriggerLeft := 4    ; 1.x
+			AxisIndexTriggerRight := 5   ; 1.x 
+
+			AxisXLeft := 0               ; 0.x    
+			AxisXRight := 1              ; 0.x
+			AxisYLeft := 2               ; 0.y
+			AxisYRight := 3              ; 0.y
+		}
+		
 		return result
 	}
 }

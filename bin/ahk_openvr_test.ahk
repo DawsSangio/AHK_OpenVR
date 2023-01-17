@@ -1,6 +1,6 @@
 #include ahk_openvr.ahk
 
-InitOpenVR()
+InitOpenVR(0)
 
 Gui, Color, White
 Gui, Font,s16, Arial  
