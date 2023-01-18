@@ -90,36 +90,9 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 //
 //	return angles;
 //}
-
-// **********************  Found on necsaver
-//public int getHmdYaw()
-//{
-//	getHMDPose();
-//	double HMDYaw = Math.Atan2(HmdPose.m2, HmdPose.m10);
-//	return (int)Math.Round((HMDYaw - HMDYawOffset) * 180.0 / Math.PI);
-//}
-//public int getHmdPitch()
-//{
-//	getHMDPose();
-//	double HMDPitch = Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
-//	return (int)Math.Round((HMDPitch) * 180.0 / Math.PI);
-//}
 //
-//public struct HmdMatrix34_t
-//{
-//	public float m0; //float[0][0]
-//	public float m1; //float[0][1]
-//	public float m2; //float[0][2]
-//	public float m3; //float[0][3]
-//	public float m4; //float[1][0]
-//	public float m5; //float[1][1]
-//	public float m6; //float[1][2]
-//	public float m7; //float[1][3]
-//	public float m8; //float[2][0]
-//	public float m9; //float[2][1]
-//	public float m10; //float[2][2]
-//	public float m11; //float[2][3]
-
+//
+//
 // converts to Euler angles in 3-2-1 sequence
 //Anglesf ToEulerAngles(HmdQuaternionf_t q)
 //{
@@ -562,6 +535,35 @@ extern "C"
 		return 0;
 	}
 
+	// **********************  Found on necsaver
+	//public int getHmdYaw()
+	//{
+	//	getHMDPose();
+	//	double HMDYaw = Math.Atan2(HmdPose.m2, HmdPose.m10);
+	//	return (int)Math.Round((HMDYaw - HMDYawOffset) * 180.0 / Math.PI);
+	//}
+	//public int getHmdPitch()
+	//{
+	//	getHMDPose();
+	//	double HMDPitch = Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
+	//	return (int)Math.Round((HMDPitch) * 180.0 / Math.PI);
+	//}
+	//
+	//public struct HmdMatrix34_t
+	//{
+	//	public float m0; //float[0][0]
+	//	public float m1; //float[0][1]
+	//	public float m2; //float[0][2]
+	//	public float m3; //float[0][3]
+	//	public float m4; //float[1][0]
+	//	public float m5; //float[1][1]
+	//	public float m6; //float[1][2]
+	//	public float m7; //float[1][3]
+	//	public float m8; //float[2][0]
+	//	public float m9; //float[2][1]
+	//	public float m10; //float[2][2]
+	//	public float m11; //float[2][3]
+
 	// Controller Positions
 	__declspec(dllexport) float getYaw(unsigned int controller)
 	{
@@ -577,29 +579,26 @@ extern "C"
 			else
 				pose = hmd_pose.mDeviceToAbsoluteTracking;
 			
-			// Foun in Necksafer code
-			// double HMDYaw = Math.Atan2(HmdPose.m2, HmdPose.m10);          m2 = m[0][2] , m10 = m[2][2]
 			float yaw = std::atan2(pose.m[0][2], pose.m[2][2]);
-			// return (int)Math.Round((HMDYaw - HMDYawOffset) * 180.0 / Math.PI);
-			return yaw * 180.0 / M_PI;
+			return -yaw * 180.0 / M_PI;
 
 			// ----------------------------------------------------------
-			//HmdQuaternion_t(w, x, y, z) // Quatf(x, y, z, w)
+			// Quatf(x, y, z, w)
 			//HmdQuaternionf_t Sq;
 			//OVR::Quatf q;
-
+			//
 			//if(controller == 0)
 			//	Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
 			//else if (controller == 1)
 			//	Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
 			//else
 			//	Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
-
+			//
 			//q.w = Sq.w;
 			//q.x = Sq.x;
 			//q.y = Sq.y;
 			//q.z = Sq.z;
-			// float yaw;
+			//float yaw, pitch, roll;
 			//q.GetYawPitchRoll(&yaw, &pitch, &roll);
 			//yaw = fmod(yaw + M_PI, M_PI *2.0) - M_PI;
 			//return -yaw * (180.0 / M_PI);
@@ -613,7 +612,18 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-			HmdQuaternionf_t Sq;
+			HmdMatrix34_t pose;
+			if (controller == 0)
+				pose = left_pose.mDeviceToAbsoluteTracking;
+			else if (controller == 1)
+				pose = right_pose.mDeviceToAbsoluteTracking;
+			else
+				pose = hmd_pose.mDeviceToAbsoluteTracking;
+			//Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
+			float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
+			return pitch * 180.0 / M_PI;
+
+			/*HmdQuaternionf_t Sq;
 			OVR::Quatf q;
 
 			if (controller == 0)
@@ -630,7 +640,7 @@ extern "C"
 			float yaw, pitch, roll;
 			q.GetYawPitchRoll(&yaw, &pitch, &roll);
 
-			return (pitch * (180 / M_PI));
+			return (pitch * (180 / M_PI));*/
 		}
 		return 0;
 	}
