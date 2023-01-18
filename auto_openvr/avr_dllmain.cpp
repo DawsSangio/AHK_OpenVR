@@ -34,13 +34,8 @@ TrackedDevicePose_t hmd_pose;
 TrackedDevicePose_t left_pose;
 TrackedDevicePose_t right_pose;
 
-// Angle and position tracking
-//ovrTrackingState	g_trackingState;		// Touch and head tracking data
-//float				g_identityAngle[3] = { 0,0,0 };	// Tracked angle that is reported as 0 degrees to the user (set by resetFacing)
-//ovrVector3f			g_xAxis = { 1,0,0 };	// X axis of reset tracking coordinate system
-//ovrVector3f			g_yAxis = { 0,1,0 };	// Y axis of reset tracking coordinate system
-//ovrVector3f			g_zAxis = { 0,0,1 };	// Z axis of reset tracking coordinate system
-//ovrVector3f			g_origin = { 0,0,0 };	// Origin of reset tracking coordinate system
+HmdMatrix34_t zeroSeatedpose;
+HmdMatrix34_t newSeatedpose;
 
 // vJoy
 int				g_vjoy = -1;
@@ -94,6 +89,20 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 //	//	angles.v[1] = std::asin(sinp) * (180 / M_PI);
 //
 //	return angles;
+//}
+
+// Found on nec safer
+//public int getHmdYaw()
+//{
+//	getHMDPose();
+//	double HMDYaw = Math.Atan2(HmdPose.m2, HmdPose.m10);
+//	return (int)Math.Round((HMDYaw - HMDYawOffset) * 180.0 / Math.PI);
+//}
+//public int getHmdPitch()
+//{
+//	getHMDPose();
+//	double HMDPitch = Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
+//	return (int)Math.Round((HMDPitch) * 180.0 / Math.PI);
 //}
 
 // converts to Euler angles in 3-2-1 sequence
@@ -325,7 +334,7 @@ extern "C"
 		if (m_pHMD)
 		{
 			VRChaperone()->ResetZeroPose(ETrackingUniverseOrigin::TrackingUniverseSeated);
-			// VRChaperoneSetup()->GetWorkingSeatedZeroPoseToRawTrackingPose(originalZero); this is needed for NeckSaver
+			VRChaperoneSetup()->GetWorkingSeatedZeroPoseToRawTrackingPose(&zeroSeatedpose); //this is needed for NeckSaver
 		}
 	}
 
@@ -335,7 +344,7 @@ extern "C"
 		// if originalZero = 0
 		// VRChaperoneSetup()->GetWorkingSeatedZeroPoseToRawTrackingPose(originalZero);
 		// else
-		// VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(originalZero+angle);
+		VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&zeroSeatedpose);
 		//
 	}
 
@@ -545,25 +554,40 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-			// HmdQuaternion_t(w, x, y, z) // Quatf(x, y, z, w)
-			HmdQuaternionf_t Sq;
-			OVR::Quatf q;
-
+			HmdMatrix34_t pose;
 			if(controller == 0)
-				Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
+				pose = left_pose.mDeviceToAbsoluteTracking;
 			else if (controller == 1)
-				Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
+				pose = right_pose.mDeviceToAbsoluteTracking;
 			else
-				Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
+				pose = hmd_pose.mDeviceToAbsoluteTracking;
+			
+			// Foun in Necksafer code
+			// double HMDYaw = Math.Atan2(HmdPose.m2, HmdPose.m10);          m2 = m[0][2] , m10 = m[2][2]
+			float yaw = std::atan2(pose.m[0][2], pose.m[2][2]);
+			// return (int)Math.Round((HMDYaw - HMDYawOffset) * 180.0 / Math.PI);
+			return yaw * 180.0 / M_PI;
 
-			q.w = Sq.w;
-			q.x = Sq.x;
-			q.y = Sq.y;
-			q.z = Sq.z;
-			float yaw, pitch, roll;
-			q.GetYawPitchRoll(&yaw, &pitch, &roll);
-			yaw = fmod(yaw + M_PI, M_PI *2.0) - M_PI;
-			return -yaw * (180.0 / M_PI);
+			// ----------------------------------------------------------
+			//HmdQuaternion_t(w, x, y, z) // Quatf(x, y, z, w)
+			//HmdQuaternionf_t Sq;
+			//OVR::Quatf q;
+
+			//if(controller == 0)
+			//	Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
+			//else if (controller == 1)
+			//	Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
+			//else
+			//	Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
+
+			//q.w = Sq.w;
+			//q.x = Sq.x;
+			//q.y = Sq.y;
+			//q.z = Sq.z;
+			// float yaw;
+			//q.GetYawPitchRoll(&yaw, &pitch, &roll);
+			//yaw = fmod(yaw + M_PI, M_PI *2.0) - M_PI;
+			//return -yaw * (180.0 / M_PI);
 		}
 		return 0;
 	}
