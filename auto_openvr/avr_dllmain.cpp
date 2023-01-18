@@ -61,7 +61,7 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 	q.z = copysign(q.z, matrix.m[1][0] - matrix.m[0][1]);
 	return q;
 }
-
+ 
 //HmdVector3_t GetAngles(HmdQuaternionf_t q)
 //{
 //	HmdVector3_t angles;    //yaw pitch roll
@@ -91,7 +91,7 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 //	return angles;
 //}
 
-// Found on nec safer
+// **********************  Found on necsaver
 //public int getHmdYaw()
 //{
 //	getHMDPose();
@@ -104,6 +104,21 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 //	double HMDPitch = Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
 //	return (int)Math.Round((HMDPitch) * 180.0 / Math.PI);
 //}
+//
+//public struct HmdMatrix34_t
+//{
+//	public float m0; //float[0][0]
+//	public float m1; //float[0][1]
+//	public float m2; //float[0][2]
+//	public float m3; //float[0][3]
+//	public float m4; //float[1][0]
+//	public float m5; //float[1][1]
+//	public float m6; //float[1][2]
+//	public float m7; //float[1][3]
+//	public float m8; //float[2][0]
+//	public float m9; //float[2][1]
+//	public float m10; //float[2][2]
+//	public float m11; //float[2][3]
 
 // converts to Euler angles in 3-2-1 sequence
 //Anglesf ToEulerAngles(HmdQuaternionf_t q)
