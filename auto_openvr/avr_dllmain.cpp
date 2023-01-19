@@ -62,6 +62,17 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 	q.z = copysign(q.z, matrix.m[1][0] - matrix.m[0][1]);
 	return q;
 }
+
+Matrix4 ConvertSteamVRMatrixToMatrix4(HmdMatrix34_t matPose)
+{
+	Matrix4 matrixObj(
+		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
+		matPose.m[0][1], matPose.m[1][1], matPose.m[2][1], 0.0,
+		matPose.m[0][2], matPose.m[1][2], matPose.m[2][2], 0.0,
+		matPose.m[0][3], matPose.m[1][3], matPose.m[2][3], 1.0f
+	);
+	return matrixObj;
+}
  
 //HmdVector3_t GetAngles(HmdQuaternionf_t q)
 //{
@@ -624,16 +635,22 @@ extern "C"
 	//		float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
 	//		return pitch * 180.0 / M_PI;
 
+			HmdMatrix34_t pose;
 			HmdQuaternionf_t Sq;
-
 			OVR::Quatf q;
 
 			if (controller == 0)
-				Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
+				pose = left_pose.mDeviceToAbsoluteTracking;
 			else if (controller == 1)
-				Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
+				pose = right_pose.mDeviceToAbsoluteTracking;
 			else
-				Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
+				pose = hmd_pose.mDeviceToAbsoluteTracking;
+
+			Matrix4 mx = ConvertSteamVRMatrixToMatrix4(pose);
+			
+			mx.rotateX(35.0);
+			
+			Sq = GetQuatRotation(pose);
 
 			q.w = Sq.w;
 			q.x = Sq.x;
