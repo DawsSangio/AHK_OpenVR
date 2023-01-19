@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include "openvr/openvr.h"
+#include "shared/Matrices.h"
 
 using namespace vr;
 
@@ -612,18 +613,19 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-			HmdMatrix34_t pose;
-			if (controller == 0)
-				pose = left_pose.mDeviceToAbsoluteTracking;
-			else if (controller == 1)
-				pose = right_pose.mDeviceToAbsoluteTracking;
-			else
-				pose = hmd_pose.mDeviceToAbsoluteTracking;
-			//Math.Atan2(Math.Sqrt(HmdPose.m2 * HmdPose.m2 + HmdPose.m10 * HmdPose.m10), HmdPose.m6);
-			float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
-			return pitch * 180.0 / M_PI;
+	//		HmdMatrix34_t pose;
+	//		if (controller == 0)
+	//			pose = left_pose.mDeviceToAbsoluteTracking;
+	//		else if (controller == 1)
+	//			pose = right_pose.mDeviceToAbsoluteTracking;
+	//		else
+	//			pose = hmd_pose.mDeviceToAbsoluteTracking;
+	//		
+	//		float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
+	//		return pitch * 180.0 / M_PI;
 
-			/*HmdQuaternionf_t Sq;
+			HmdQuaternionf_t Sq;
+
 			OVR::Quatf q;
 
 			if (controller == 0)
@@ -640,7 +642,7 @@ extern "C"
 			float yaw, pitch, roll;
 			q.GetYawPitchRoll(&yaw, &pitch, &roll);
 
-			return (pitch * (180 / M_PI));*/
+			return (pitch * (180 / M_PI));
 		}
 		return 0;
 	}
