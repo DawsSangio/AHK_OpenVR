@@ -84,6 +84,11 @@ Loop {
 	if rightIndexTrigger > 0.8
 		Vibrate(1, 1000)
 
+	if IsPressed(ovrX)
+		SetTrackingYaw(180)
+	else if IsReleased(overX)
+		RecenterTrackingYaw()
+
     ; Get button states. 
 	lx := leftX*50+50
 	ly := leftY*50+50

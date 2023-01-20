@@ -70,6 +70,8 @@ Func_initOpenVR := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "initOpen
 Func_poll := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "poll", "Ptr")
 Func_isWearing := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "isWearing", "Ptr")
 Func_recenterTrackingOrigin := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "recenterTrackingOrigin", "Ptr")
+Func_setTrackingYaw := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setTrackingYaw", "Ptr")
+Func_recenterTrackingYaw := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setTrackingYawToZero", "Ptr")
 
 Func_isPressed := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "isPressed", "Ptr")
 Func_isReleased := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "isReleased", "Ptr")
@@ -178,6 +180,18 @@ RecenterTrackingOrigin()
 {
 	global Func_recenterTrackingOrigin
 	DllCall(Func_recenterTrackingOrigin)
+}
+
+SetTrackingYaw(yaw)
+{
+	global Func_setTrackingYaw
+	DllCall(Func_setTrackingYaw, "Float", yaw)
+}
+
+RecenterTrackingYaw()
+{
+	global Func_recenterTrackingYaw
+	DllCall(Func_recenterTrackingYaw)
 }
 
 IsPressed(button)
