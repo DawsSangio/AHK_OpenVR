@@ -86,7 +86,7 @@ Loop {
 
 	if IsPressed(ovrX)
 		SetTrackingYaw(180)
-	else if IsReleased(overX)
+	if IsReleased(ovrX)
 		RecenterTrackingYaw()
 
     ; Get button states. 
