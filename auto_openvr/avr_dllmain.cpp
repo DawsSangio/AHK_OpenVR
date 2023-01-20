@@ -95,72 +95,7 @@ HmdMatrix34_t ConvertMatrix4ToOpenVRMatrix34(Matrix4 matPose)
 	
 	return matrixObj;
 }
-
-//OVR::Matrix4f ConvertSteamVRMatrixToMatrix4OVR(HmdMatrix34_t matPose)
-//{
-//		OVR::Matrix4f matrixObj(
-//		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
-//		matPose.m[0][1], matPose.m[1][1], matPose.m[2][1], 0.0,
-//		matPose.m[0][2], matPose.m[1][2], matPose.m[2][2], 0.0,
-//		matPose.m[0][3], matPose.m[1][3], matPose.m[2][3], 1.0f
-//	);
-//	return matrixObj;
-//}
  
-//HmdVector3_t GetAngles(HmdQuaternionf_t q)
-//{
-//	HmdVector3_t angles;    //yaw pitch roll
-//	float x = q.x;
-//	float y = q.y;
-//	float z = q.z;
-//	float w = q.w;
-//
-//	// PITCH (x-axis rotation) OK
-//	double sinr_cosp = 2 * (w * x + y * z);
-//	double cosr_cosp = 1 - 2 * (x * x + y * y);
-//	angles.v[2] = std::atan2(sinr_cosp, cosr_cosp) * (180 / M_PI);
-//
-//	// ROLL (z-axis rotation) OK
-//	double siny_cosp = 2 * (w * z + x * y);
-//	double cosy_cosp = 1 - 2 * (y * y + z * z);
-//	angles.v[0] = -std::atan2(siny_cosp, cosy_cosp) * (180 / M_PI);
-//
-//	// YAW (y-axis rotation) NON FUNZIOINA
-//	double sinp = 2 * (w * y - z * x);
-//	angles.v[1] = std::asin(sinp) * (90 / M_PI);
-//	//if (std::abs(sinp) >= 1)
-//	//	angles.v[1] = std::copysign(M_PI / 2, sinp) * (180 / M_PI); // use 90 degrees if out of range
-//	//else
-//	//	angles.v[1] = std::asin(sinp) * (180 / M_PI);
-//
-//	return angles;
-//}
-//
-//
-//
-// converts to Euler angles in 3-2-1 sequence
-//Anglesf ToEulerAngles(HmdQuaternionf_t q)
-//{
-//	Anglesf angles;
-//	
-//	// roll (x-axis rotation)
-//	double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
-//	double cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
-//	angles.roll = std::atan2(sinr_cosp, cosr_cosp) * (180 / M_PI);
-//
-//	// pitch (y-axis rotation)
-//	double sinp = std::sqrt(1 + 2 * (q.w * q.x - q.y * q.z));
-//	double cosp = std::sqrt(1 - 2 * (q.w * q.x - q.y * q.z));
-//	angles.pitch = 2 * std::atan2(sinp, cosp) - M_PI / 2 * (180 / M_PI);
-//
-//	// yaw (z-axis rotation)
-//	double siny_cosp = 2 * (q.w * q.z + q.x * q.y);
-//	double cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
-//	angles.yaw = std::atan2(siny_cosp, cosy_cosp) * (90 / M_PI);
-//
-//	return angles;
-//}
-
 // Button id                      // AHK
 //k_EButton_System = 0,           // 
 //k_EButton_ApplicationMenu = 1,  // 2  Oculus B
@@ -608,11 +543,11 @@ extern "C"
 	//	public float m9; //float[2][1]
 	//	public float m10; //float[2][2]
 	//	public float m11; //float[2][3]
-
+	//
 	//  m[0][0] m[0][1] m[0][2]  m[0][3]
 	//	m[1][0] m[1][1] m[1][2]  m[1][3]
 	//	m[2][0] m[2][1] m[2][2]  m[2][3]
-
+	//
 	//  AXx      AYx     AZx       Tx
 	//	AXy      AYy     AZy       Ty
 	//	AXz      AYz     AZz       Tz
@@ -625,7 +560,22 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
+			//HmdMatrix34_t pose;
+			//if(controller == 0)
+			//	pose = left_pose.mDeviceToAbsoluteTracking;
+			//else if (controller == 1)
+			//	pose = right_pose.mDeviceToAbsoluteTracking;
+			//else
+			//	pose = hmd_pose.mDeviceToAbsoluteTracking;
+			//
+			//float yaw = std::atan2(pose.m[0][2], pose.m[2][2]); // AZx AZz
+			//return -yaw * 180.0 / M_PI;
+			//
+			// ----------------------------------------------------------
 			HmdMatrix34_t pose;
+			HmdQuaternionf_t Sq;
+			OVR::Quatf q;
+			
 			if(controller == 0)
 				pose = left_pose.mDeviceToAbsoluteTracking;
 			else if (controller == 1)
@@ -633,29 +583,16 @@ extern "C"
 			else
 				pose = hmd_pose.mDeviceToAbsoluteTracking;
 			
-			float yaw = std::atan2(pose.m[0][2], pose.m[2][2]); // AZx AZz
-			return -yaw * 180.0 / M_PI;
+			Sq = GetQuatRotation(pose);
 
-			// ----------------------------------------------------------
-			// Quatf(x, y, z, w)
-			//HmdQuaternionf_t Sq;
-			//OVR::Quatf q;
-			//
-			//if(controller == 0)
-			//	Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
-			//else if (controller == 1)
-			//	Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
-			//else
-			//	Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
-			//
-			//q.w = Sq.w;
-			//q.x = Sq.x;
-			//q.y = Sq.y;
-			//q.z = Sq.z;
-			//float yaw, pitch, roll;
-			//q.GetYawPitchRoll(&yaw, &pitch, &roll);
-			//yaw = fmod(yaw + M_PI, M_PI *2.0) - M_PI;
-			//return -yaw * (180.0 / M_PI);
+			q.w = Sq.w;
+			q.x = Sq.x;
+			q.y = Sq.y;
+			q.z = Sq.z;
+			float yaw, pitch, roll;
+			q.GetYawPitchRoll(&yaw, &pitch, &roll);
+			yaw = fmod(yaw + M_PI, M_PI *2.0) - M_PI;
+			return -yaw * (180.0 / M_PI);
 		}
 		return 0;
 	}
@@ -666,24 +603,7 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-			HmdMatrix34_t pose;
-			if (controller == 0)
-				pose = left_pose.mDeviceToAbsoluteTracking;
-			else if (controller == 1)
-				pose = right_pose.mDeviceToAbsoluteTracking;
-			else
-				pose = hmd_pose.mDeviceToAbsoluteTracking;
-			
-			Matrix4 m4 = ConvertOpenVRMatrixToMatrix4(pose);
-			m4.rotateX(35.0); // correct hand pose
-			pose = ConvertMatrix4ToOpenVRMatrix34(m4);
-
-			float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
-			return pitch * 180.0 / M_PI;
-
-			//HmdQuaternionf_t Sq;
-			//OVR::Quatf q;
-			//
+			//HmdMatrix34_t pose;
 			//if (controller == 0)
 			//	pose = left_pose.mDeviceToAbsoluteTracking;
 			//else if (controller == 1)
@@ -691,17 +611,43 @@ extern "C"
 			//else
 			//	pose = hmd_pose.mDeviceToAbsoluteTracking;
 			//
-			//OVR::Matrix4f mx4 = ConvertSteamVRMatrixToMatrix4OVR(pose);
+			//Matrix4 m4 = ConvertOpenVRMatrixToMatrix4(pose);
+			//m4.rotateZ(70.0); // correct hand pose
+			//pose = ConvertMatrix4ToOpenVRMatrix34(m4);
 			//
-			//mx4.RotationX(35.0 * 180.0 / M_PI);
-			//
-			//q.w = Sq.w;
-			//q.x = Sq.x;
-			//q.y = Sq.y;
-			//q.z = Sq.z;
-			//float yaw, pitch, roll;
-			//q.GetYawPitchRoll(&yaw, &pitch, &roll);
-			//return pitch;
+			//float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
+			//return pitch * 180.0 / M_PI;
+
+			HmdMatrix34_t pose;
+			HmdQuaternionf_t Sq;
+			OVR::Quatf q;
+			
+			if (controller == 0)
+			{
+				pose = left_pose.mDeviceToAbsoluteTracking;
+				//Matrix4 mx4 = ConvertOpenVRMatrixToMatrix4(pose);
+				//mx4.rotateX(0);
+				//pose = ConvertMatrix4ToOpenVRMatrix34(mx4);
+			}
+			else if (controller == 1)
+			{
+				pose = right_pose.mDeviceToAbsoluteTracking;
+				//Matrix4 mx4 = ConvertOpenVRMatrixToMatrix4(pose);
+				//mx4.rotateX(0);
+				//pose = ConvertMatrix4ToOpenVRMatrix34(mx4);
+			}
+			else
+				pose = hmd_pose.mDeviceToAbsoluteTracking;
+
+			Sq = GetQuatRotation(pose);
+			
+			q.w = Sq.w;
+			q.x = Sq.x;
+			q.y = Sq.y;
+			q.z = Sq.z;
+			float yaw, pitch, roll;
+			q.GetYawPitchRoll(&yaw, &pitch, &roll);
+			return pitch * 180.0 / M_PI;
 		}
 		return 0;
 	}
@@ -712,27 +658,29 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
+			//HmdMatrix34_t pose;
+			//if (controller == 0)
+			//	pose = left_pose.mDeviceToAbsoluteTracking;
+			//else if (controller == 1)
+			//	pose = right_pose.mDeviceToAbsoluteTracking;
+			//else
+			//	pose = hmd_pose.mDeviceToAbsoluteTracking;
+			//
+			//float roll = std::atan2(pose.m[0][1], pose.m[1][1]); // AYx AYy
+			//return roll * 180.0 / M_PI;
+			
 			HmdMatrix34_t pose;
+			HmdQuaternionf_t Sq;
+			OVR::Quatf q;
+
 			if (controller == 0)
 				pose = left_pose.mDeviceToAbsoluteTracking;
 			else if (controller == 1)
 				pose = right_pose.mDeviceToAbsoluteTracking;
 			else
 				pose = hmd_pose.mDeviceToAbsoluteTracking;
-
-			float roll = std::atan2(pose.m[0][1], pose.m[1][1]); // AYx AYy
-			return roll * 180.0 / M_PI;
 			
-			/*HmdQuaternionf_t Sq;
-			OVR::Quatf q;
-			OVR::Matrix4f m4;
-
-			if (controller == 0)
-				Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
-			else if (controller == 1)
-				Sq = GetQuatRotation(right_pose.mDeviceToAbsoluteTracking);
-			else
-				Sq = GetQuatRotation(hmd_pose.mDeviceToAbsoluteTracking);
+			Sq = GetQuatRotation(pose);
 
 			q.w = Sq.w;
 			q.x = Sq.x;
@@ -740,9 +688,7 @@ extern "C"
 			q.z = Sq.z;
 			float yaw, pitch, roll;
 			q.GetYawPitchRoll(&yaw, &pitch, &roll);
-			return -roll * (180.0 / 3.14159265);*/
-
-
+			return -roll * (180.0 / 3.14159265);
 		}
 		return 0;
 	}
