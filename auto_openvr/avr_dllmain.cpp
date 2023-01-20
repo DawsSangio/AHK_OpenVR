@@ -63,7 +63,7 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 	return q;
 }
 
-Matrix4 ConvertSteamVRMatrixToMatrix4(HmdMatrix34_t matPose)
+Matrix4 ConvertOpenVRMatrixToMatrix4(HmdMatrix34_t matPose)
 {
 	Matrix4 matrixObj(
 		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
@@ -73,6 +73,39 @@ Matrix4 ConvertSteamVRMatrixToMatrix4(HmdMatrix34_t matPose)
 	);
 	return matrixObj;
 }
+
+HmdMatrix34_t ConvertMatrix4ToOpenVRMatrix34(Matrix4 matPose)
+{
+	HmdMatrix34_t matrixObj;
+	matrixObj.m[0][0] = matPose[0];
+	matrixObj.m[1][0] = matPose[1];
+	matrixObj.m[2][0] = matPose[2];
+	
+	matrixObj.m[0][1] = matPose[4];
+	matrixObj.m[1][1] = matPose[5];
+	matrixObj.m[2][1] = matPose[6];
+
+	matrixObj.m[0][2] = matPose[8];
+	matrixObj.m[1][2] = matPose[9];
+	matrixObj.m[2][2] = matPose[10];
+
+	matrixObj.m[0][3] = matPose[12];
+	matrixObj.m[1][3] = matPose[13];
+	matrixObj.m[2][3] = matPose[14];
+	
+	return matrixObj;
+}
+
+//OVR::Matrix4f ConvertSteamVRMatrixToMatrix4OVR(HmdMatrix34_t matPose)
+//{
+//		OVR::Matrix4f matrixObj(
+//		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
+//		matPose.m[0][1], matPose.m[1][1], matPose.m[2][1], 0.0,
+//		matPose.m[0][2], matPose.m[1][2], matPose.m[2][2], 0.0,
+//		matPose.m[0][3], matPose.m[1][3], matPose.m[2][3], 1.0f
+//	);
+//	return matrixObj;
+//}
  
 //HmdVector3_t GetAngles(HmdQuaternionf_t q)
 //{
@@ -576,6 +609,15 @@ extern "C"
 	//	public float m10; //float[2][2]
 	//	public float m11; //float[2][3]
 
+	//  m[0][0] m[0][1] m[0][2]  m[0][3]
+	//	m[1][0] m[1][1] m[1][2]  m[1][3]
+	//	m[2][0] m[2][1] m[2][2]  m[2][3]
+
+	//  AXx      AYx     AZx       Tx
+	//	AXy      AYy     AZy       Ty
+	//	AXz      AYz     AZz       Tz
+
+
 	// Controller Positions
 	__declspec(dllexport) float getYaw(unsigned int controller)
 	{
@@ -591,7 +633,7 @@ extern "C"
 			else
 				pose = hmd_pose.mDeviceToAbsoluteTracking;
 			
-			float yaw = std::atan2(pose.m[0][2], pose.m[2][2]);
+			float yaw = std::atan2(pose.m[0][2], pose.m[2][2]); // AZx AZz
 			return -yaw * 180.0 / M_PI;
 
 			// ----------------------------------------------------------
@@ -624,42 +666,42 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-	//		HmdMatrix34_t pose;
-	//		if (controller == 0)
-	//			pose = left_pose.mDeviceToAbsoluteTracking;
-	//		else if (controller == 1)
-	//			pose = right_pose.mDeviceToAbsoluteTracking;
-	//		else
-	//			pose = hmd_pose.mDeviceToAbsoluteTracking;
-	//		
-	//		float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
-	//		return pitch * 180.0 / M_PI;
-
 			HmdMatrix34_t pose;
-			HmdQuaternionf_t Sq;
-			OVR::Quatf q;
-
 			if (controller == 0)
 				pose = left_pose.mDeviceToAbsoluteTracking;
 			else if (controller == 1)
 				pose = right_pose.mDeviceToAbsoluteTracking;
 			else
 				pose = hmd_pose.mDeviceToAbsoluteTracking;
-
-			Matrix4 mx = ConvertSteamVRMatrixToMatrix4(pose);
 			
-			mx.rotateX(35.0);
-			
-			Sq = GetQuatRotation(pose);
+			Matrix4 m4 = ConvertOpenVRMatrixToMatrix4(pose);
+			m4.rotateX(35.0); // correct hand pose
+			pose = ConvertMatrix4ToOpenVRMatrix34(m4);
 
-			q.w = Sq.w;
-			q.x = Sq.x;
-			q.y = Sq.y;
-			q.z = Sq.z;
-			float yaw, pitch, roll;
-			q.GetYawPitchRoll(&yaw, &pitch, &roll);
+			float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
+			return pitch * 180.0 / M_PI;
 
-			return (pitch * (180 / M_PI));
+			//HmdQuaternionf_t Sq;
+			//OVR::Quatf q;
+			//
+			//if (controller == 0)
+			//	pose = left_pose.mDeviceToAbsoluteTracking;
+			//else if (controller == 1)
+			//	pose = right_pose.mDeviceToAbsoluteTracking;
+			//else
+			//	pose = hmd_pose.mDeviceToAbsoluteTracking;
+			//
+			//OVR::Matrix4f mx4 = ConvertSteamVRMatrixToMatrix4OVR(pose);
+			//
+			//mx4.RotationX(35.0 * 180.0 / M_PI);
+			//
+			//q.w = Sq.w;
+			//q.x = Sq.x;
+			//q.y = Sq.y;
+			//q.z = Sq.z;
+			//float yaw, pitch, roll;
+			//q.GetYawPitchRoll(&yaw, &pitch, &roll);
+			//return pitch;
 		}
 		return 0;
 	}
@@ -670,8 +712,20 @@ extern "C"
 			return 0;
 		if (m_pHMD)
 		{
-			HmdQuaternionf_t Sq;
+			HmdMatrix34_t pose;
+			if (controller == 0)
+				pose = left_pose.mDeviceToAbsoluteTracking;
+			else if (controller == 1)
+				pose = right_pose.mDeviceToAbsoluteTracking;
+			else
+				pose = hmd_pose.mDeviceToAbsoluteTracking;
+
+			float roll = std::atan2(pose.m[0][1], pose.m[1][1]); // AYx AYy
+			return roll * 180.0 / M_PI;
+			
+			/*HmdQuaternionf_t Sq;
 			OVR::Quatf q;
+			OVR::Matrix4f m4;
 
 			if (controller == 0)
 				Sq = GetQuatRotation(left_pose.mDeviceToAbsoluteTracking);
@@ -686,7 +740,9 @@ extern "C"
 			q.z = Sq.z;
 			float yaw, pitch, roll;
 			q.GetYawPitchRoll(&yaw, &pitch, &roll);
-			return -roll * (180.0 / 3.14159265);
+			return -roll * (180.0 / 3.14159265);*/
+
+
 		}
 		return 0;
 	}
