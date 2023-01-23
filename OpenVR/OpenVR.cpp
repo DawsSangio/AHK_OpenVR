@@ -61,9 +61,11 @@ int main()
 	IVRSystem* m_pHMD;
 	EVRInitError m_eLastHmdError;
 
+	TrackedDeviceIndex_t left_handidx;
+	TrackedDeviceIndex_t right_handidx;
+
 	VRControllerState_t left_state;
 	VRControllerState_t right_state;
-
 
 	TrackedDevicePose_t hmd_pose;
 	TrackedDevicePose_t left_pose;
@@ -89,6 +91,14 @@ int main()
 	HmdQuaternion_t q;
 	HmdVector3_t angles;
 
+	VROverlayHandle_t handle;
+	VROverlay()->CreateOverlay("image", "image", &handle); /* key has to be unique, name doesn't matter */
+	VROverlay()->SetOverlayFromFile(handle, "/circle.png");
+	VROverlay()->SetOverlayWidthInMeters(handle, 0.1);
+	VROverlay()->ShowOverlay(handle);
+	
+
+
 	while(true)
 	{
 
@@ -109,6 +119,7 @@ int main()
 				ETrackedControllerRole trackedControllerRole = vr::VRSystem()->GetControllerRoleForTrackedDeviceIndex(unDevice);
 				switch (trackedControllerRole) {
 				case TrackedControllerRole_LeftHand:
+					left_handidx = unDevice;
 					VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, unDevice, &left_state, sizeof(left_state), &left_pose);
 					lx = left_pose.mDeviceToAbsoluteTracking.m[0][3];
 					ly = left_pose.mDeviceToAbsoluteTracking.m[1][3];
@@ -126,14 +137,11 @@ int main()
 				}
 				break;
 			}
-			/*roll = angles.v[0];
-			pitch = angles.v[2]-30;
-			yaw = angles.v[1];
-			printf("HMD  Roll:%f Pitch:%f Yaw:%f\r", roll, pitch, yaw);*/
+	
+
+			VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_handidx, 0);
 
 		}
-
-
 
 
 	}
