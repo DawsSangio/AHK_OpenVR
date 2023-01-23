@@ -90,14 +90,19 @@ int main()
 
 	HmdQuaternion_t q;
 	HmdVector3_t angles;
-
+	VROverlayError ov_error;
 	VROverlayHandle_t handle;
-	VROverlay()->CreateOverlay("image", "image", &handle); /* key has to be unique, name doesn't matter */
-	VROverlay()->SetOverlayFromFile(handle, "/circle.png");
-	VROverlay()->SetOverlayWidthInMeters(handle, 0.1);
-	VROverlay()->ShowOverlay(handle);
+	ov_error = VROverlay()->CreateOverlay("circle", "image", &handle); /* key has to be unique and different from name */
+	ov_error = VROverlay()->SetOverlayFromFile(handle, "c:/Users/daws7/Desktop/circle.png"); // need full path !!!
+	ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1); 
+	ov_error = VROverlay()->ShowOverlay(handle);
 	
-
+	vr::HmdMatrix34_t transform = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f
+	};
+	VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, 3, &transform);
 
 	while(true)
 	{
@@ -124,7 +129,6 @@ int main()
 					lx = left_pose.mDeviceToAbsoluteTracking.m[0][3];
 					ly = left_pose.mDeviceToAbsoluteTracking.m[1][3];
 					lz = left_pose.mDeviceToAbsoluteTracking.m[2][3];
-					VRSystem()->TriggerHapticPulse(unDevice, 1, 5000);
 
 					break;
 
@@ -137,14 +141,13 @@ int main()
 				}
 				break;
 			}
-	
-
-			VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_handidx, 0);
-
 		}
-
+	
+		
 
 	}
-	
+
+
+
 
 }
