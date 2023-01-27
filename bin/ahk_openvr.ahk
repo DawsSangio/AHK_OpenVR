@@ -128,10 +128,19 @@ InitOpenVR(HMDmodel)
 			AxisXRight := 1              ; 0.x
 			AxisYLeft := 2               ; 0.y
 			AxisYRight := 3              ; 0.y
-
 		}
 		else if (HMDmodel = 1) ; Valve Index
-		{}
+		{
+			AxisIndexTriggerLeft := 4    ; 1.x
+			AxisIndexTriggerRight := 5   ; 1.x 
+			AxisHandTriggerLeft := 6     ; 2.x     
+			AxisHandTriggerRight := 7    ; 2.x 
+			
+			AxisXLeft := 0               ; 0.x
+			AxisXRight := 1              ; 0.x
+			AxisYLeft := 2               ; 0.y
+			AxisYRight := 3              ; 0.y
+		}
 		else if (HMDmodel = 2) ; WMR gen 1 w/touchpad
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x
@@ -148,7 +157,16 @@ InitOpenVR(HMDmodel)
 			AxisYPadRight := 3           ; 0.y
 		}
 		else if (HMDmodel = 3)  ; WMR gen 2 w/stick only
-		{}
+		{
+			AxisIndexTriggerLeft := 4    ; 1.x
+			AxisIndexTriggerRight := 5   ; 1.x 
+			
+			AxisXLeft := 0               ; 0.x
+			AxisXRight := 1              ; 0.x
+			AxisYLeft := 2               ; 0.y
+			AxisYRight := 3              ; 0.y
+
+		}
 		else if (HMDmodel = 4) ; VIVE Wands
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x

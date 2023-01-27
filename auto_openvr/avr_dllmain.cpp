@@ -551,12 +551,19 @@ extern "C"
 	//	public float m11; //float[2][3]
 	//
 	//  m[0][0] m[0][1] m[0][2]  m[0][3]
+	// 
 	//	m[1][0] m[1][1] m[1][2]  m[1][3]
-	//	m[2][0] m[2][1] m[2][2]  m[2][3]
+	//	
+	//  m[2][0] m[2][1] m[2][2]  m[2][3]
 	//
-	//  AXx      AYx     AZx       Tx
-	//	AXy      AYy     AZy       Ty
-	//	AXz      AYz     AZz       Tz
+	//   AXx      AYx     AZx       Tx
+	//	 AXy      AYy     AZy       Ty
+	//	 AXz      AYz     AZz       Tz
+	// 
+	// 
+	//float yaw = std::atan2(pose.m[0][2], pose.m[2][2]);
+	//
+	//float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
 
 
 	// Controller Positions

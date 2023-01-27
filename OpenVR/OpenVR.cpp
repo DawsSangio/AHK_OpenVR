@@ -1,11 +1,12 @@
 // OpenVR.cpp : Questo file contiene la funzione 'main', in cui inizia e termina l'esecuzione del programma.
 //
 #define _USE_MATH_DEFINES
+#include <windows.h>
 #include <iostream>
 #include <stdlib.h>
 #include <cmath>
-#include "openvr.h"
-
+#include "shared/pathtools.h"
+#include "openvr/openvr.h"
 
 
 using namespace vr;
