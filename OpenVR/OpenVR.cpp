@@ -1,15 +1,15 @@
 // OpenVR.cpp : Questo file contiene la funzione 'main', in cui inizia e termina l'esecuzione del programma.
 //
 #define _USE_MATH_DEFINES
-#include <windows.h>
 #include <iostream>
 #include <stdlib.h>
-#include <cmath>
-#include "shared/pathtools.h"
+#include <filesystem> // per usare Path serve C++17
+#include <cmath>  // serve per il pigreco
+
 #include "openvr/openvr.h"
 
-
 using namespace vr;
+
 
 HmdQuaternion_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 {
@@ -72,6 +72,9 @@ int main()
 	TrackedDevicePose_t left_pose;
 	TrackedDevicePose_t right_pose;
 
+	std::filesystem::path _path = std::filesystem::current_path().append("circle.png");
+	
+
 	m_pHMD = VR_Init(&m_eLastHmdError, vr::VRApplication_Background);
 
 	if (m_eLastHmdError != vr::VRInitError_None)
@@ -88,13 +91,15 @@ int main()
 
 	float x, y, z, lx, ly, lz, rx, ry, rz;
 	float pitch,roll,yaw;
+	
+
 
 	HmdQuaternion_t q;
 	HmdVector3_t angles;
 	VROverlayError ov_error;
 	VROverlayHandle_t handle;
 	ov_error = VROverlay()->CreateOverlay("circle", "image", &handle); /* key has to be unique and different from name */
-	ov_error = VROverlay()->SetOverlayFromFile(handle, "c:/Users/daws7/Desktop/circle.png"); // need full path !!!
+	ov_error = VROverlay()->SetOverlayFromFile(handle,   _path.string().c_str() ); // need full path !!!
 	ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1); 
 	ov_error = VROverlay()->ShowOverlay(handle);
 	
