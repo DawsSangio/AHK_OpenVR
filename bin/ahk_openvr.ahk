@@ -97,6 +97,8 @@ Func_initvJoy := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "initvJoy",
 Func_setvJoyAxis := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyAxis", "Ptr")
 Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyButton", "Ptr")
 
+Func_setvOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setOverlay", "Ptr")
+
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
 ; Init OpenVR
@@ -336,4 +338,12 @@ SendRawMouseMove(x, y, z)
 {
 	global Func_sendRawMouseMove
     DllCall(Func_sendRawMouseMove, "Int", x, "Int", y, "Int", z)
+}
+
+; Set Overlay with a image.png
+; return Overlay handle
+SetvOverlay(image)
+{
+	global Func_setOverlay
+    return DllCall(Func_setOverlay, "AStr", image, "UInt64")
 }

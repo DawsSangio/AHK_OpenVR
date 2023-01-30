@@ -13,6 +13,7 @@
 #include "oculus/Extras/OVR_Math.h"
 
 #include <cmath>
+#include <filesystem>
 #include "openvr/openvr.h"
 #include "shared/Matrices.h"
 
@@ -320,6 +321,27 @@ extern "C"
 		VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&zeroSeatedpose);
 	}
 
+	// Overlay helpers
+	__declspec(dllexport) VROverlayHandle_t setOverlay(const char* overlayName)
+	{
+		VROverlayError ov_error;
+		VROverlayHandle_t handle;
+		std::string name = overlayName;
+		name.append("_name");
+		ov_error = VROverlay()->CreateOverlay(overlayName, name.c_str(), &handle); /* key has to be unique and different from name */
+		ov_error = VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayName).string().c_str());
+		ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1);
+		ov_error = VROverlay()->ShowOverlay(handle);
+
+		vr::HmdMatrix34_t transform = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f
+		};
+		VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_index, &transform); // left for testing.
+
+		return handle;
+	}
 
 
 	__declspec(dllexport) float getAxis(unsigned int axis)
