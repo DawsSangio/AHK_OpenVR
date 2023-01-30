@@ -336,7 +336,7 @@ extern "C"
 		vr::HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f
+			0.0f, 0.0f, 1.0f, 0.05f
 		};
 		VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_index, &transform); // left for testing.
 

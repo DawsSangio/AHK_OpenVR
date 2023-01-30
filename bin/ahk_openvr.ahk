@@ -97,7 +97,7 @@ Func_initvJoy := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "initvJoy",
 Func_setvJoyAxis := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyAxis", "Ptr")
 Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyButton", "Ptr")
 
-Func_setvOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setOverlay", "Ptr")
+Func_setOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setOverlay", "Ptr")
 
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
