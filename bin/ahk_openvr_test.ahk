@@ -54,6 +54,8 @@ Gui, Show
 Poll()
 RecenterTrackingOrigin()
 
+SetOverlay("circle.png")
+
 Loop {
     ; Grab the latest Oculus input state (Touch, Remote and Xbox One).
     Poll()
