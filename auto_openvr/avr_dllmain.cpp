@@ -322,15 +322,18 @@ extern "C"
 	}
 
 	// Overlay helpers
-	__declspec(dllexport) VROverlayHandle_t setOverlay(const char* overlayName)
+	__declspec(dllexport) VROverlayHandle_t CreateOverlay(const char* overlayImage, unsigned int controller)
 	{
+		if (controller > 2)
+			return 0;
+
 		VROverlayError ov_error;
 		VROverlayHandle_t handle;
-		std::string name = overlayName;
+		std::string name = overlayImage;
 		name.append("_name");
-		ov_error = VROverlay()->CreateOverlay(overlayName, name.c_str(), &handle); /* key has to be unique and different from name */
-		ov_error = VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayName).string().c_str());
-		ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1);
+		ov_error = VROverlay()->CreateOverlay(overlayImage, name.c_str(), &handle); /* key has to be unique and different from name */
+		ov_error = VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
+		ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1f);
 		ov_error = VROverlay()->ShowOverlay(handle);
 
 		vr::HmdMatrix34_t transform = {
@@ -338,12 +341,24 @@ extern "C"
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.05f
 		};
-		VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_index, &transform); // left for testing.
+		
+		switch (controller)
+		{
+		case 2:
+
+			break;
+		case 0:
+			VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_index, &transform); 
+			break;
+		case 1:
+			VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, right_index, &transform);
+			break;
+		}
 
 		return handle;
 	}
 
-
+	// Axis
 	__declspec(dllexport) float getAxis(unsigned int axis)
 	{
 		if (m_pHMD)
@@ -586,7 +601,6 @@ extern "C"
 	//float yaw = std::atan2(pose.m[0][2], pose.m[2][2]);
 	//
 	//float pitch = std::atan2(std::sqrtf(pose.m[0][2] * pose.m[0][2] + pose.m[2][2] * pose.m[2][2]), pose.m[1][2]);
-
 
 	// Controller Positions
 	__declspec(dllexport) float getYaw(unsigned int controller)

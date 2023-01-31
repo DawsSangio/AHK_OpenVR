@@ -4,9 +4,9 @@
 ;///////////////////////////////////////////////////////////////////////////////
 
 ; Misc defines
-LeftHand  := 0
-RightHand := 1
-Head := 2
+global LeftHand  := 0
+global RightHand := 1
+global Head := 2
 
 ; Button enums
 global ovrA         := 1       
@@ -22,11 +22,6 @@ global ovrLGrip     := 400
 global ovrLThumb    := 500 
  
 ovrEnter     := 0x00100000      ; Touch-Left Menu
-
-global indexA       := 4
-global indexB       := 2
-global indexX       := 400
-global indexY       := 200
 
 ; Global Axis defines
 global AxisIndexTriggerLeft
@@ -97,12 +92,12 @@ Func_initvJoy := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "initvJoy",
 Func_setvJoyAxis := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyAxis", "Ptr")
 Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyButton", "Ptr")
 
-Func_setOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setOverlay", "Ptr")
+Func_CreateOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "CreateOverlay", "Ptr")
 
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
 ; Init OpenVR
-; Use specific HMDmodel to initialize correct axis and buttons assignment:
+; Use specific HMD model to initialize correct axis and buttons assignment:
 ; 0 = Oculus
 ; 1 = Index
 ; 2 = WMR touchpad gen 1
@@ -133,6 +128,11 @@ InitOpenVR(HMDmodel)
 		}
 		else if (HMDmodel = 1) ; Valve Index
 		{
+			ovrA       := 4
+			ovrB       := 2
+			ovrX       := 400
+			ovrY       := 200
+			
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 
 			AxisHandTriggerLeft := 6     ; 2.x     
@@ -341,9 +341,9 @@ SendRawMouseMove(x, y, z)
 }
 
 
-;  Set Overlay with a image.png. Return Overlay handle
-SetOverlay(image)
+;  Create Overlay with a image.png. Return Overlay handle
+CreateOverlay(image,controller)
 {
-	global Func_setOverlay
-    return DllCall(Func_setOverlay, "AStr", image, "UInt64")
+	global Func_CreateOverlay
+    return DllCall(Func_CreateOverlay, "AStr", image, "UInt", controller, "UInt64")
 }

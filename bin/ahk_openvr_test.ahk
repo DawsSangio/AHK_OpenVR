@@ -54,7 +54,8 @@ Gui, Show
 Poll()
 RecenterTrackingOrigin()
 
-SetOverlay("circle.png")
+CreateOverlay("circle.png",0)
+CreateOverlay("circle.png",1)
 
 Loop {
     ; Grab the latest Oculus input state (Touch, Remote and Xbox One).
