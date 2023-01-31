@@ -330,8 +330,10 @@ extern "C"
 		VROverlayError ov_error;
 		VROverlayHandle_t handle;
 		std::string name = overlayImage;
+		std::string key = overlayImage;
 		name.append("_name");
-		ov_error = VROverlay()->CreateOverlay(overlayImage, name.c_str(), &handle); /* key has to be unique and different from name */
+		key.append(std::to_string(controller));
+		ov_error = VROverlay()->CreateOverlay(key.c_str(), name.c_str(), &handle); /* key has to be unique and different from name */
 		ov_error = VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
 		ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1f);
 		ov_error = VROverlay()->ShowOverlay(handle);
@@ -341,7 +343,6 @@ extern "C"
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.05f
 		};
-		
 		switch (controller)
 		{
 		case 2:

@@ -353,11 +353,11 @@ CreateOverlay(image,controller)
 ShowOverlay(overlay)
 {
 	global Func_ShowOverlay
-	DllCall("GetProcAddress", "UInt64", overlay)
+	DllCall(Func_ShowOverlay, "UInt64", overlay)
 }
 
 HideOverlay(overlay)
 {
 	global Func_HideOverlay
-	DllCall("GetProcAddress", "UInt64", overlay)
+	DllCall(Func_HideOverlay, "UInt64", overlay)
 }
