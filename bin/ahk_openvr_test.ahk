@@ -54,8 +54,8 @@ Gui, Show
 Poll()
 RecenterTrackingOrigin()
 
-CreateOverlay("circle.png",0)
-CreateOverlay("circle.png",1)
+leftOverlay := CreateOverlay("circle.png",0)
+rightOverlay := CreateOverlay("circle.png",1)
 
 Loop {
     ; Grab the latest Oculus input state (Touch, Remote and Xbox One).
@@ -87,12 +87,17 @@ Loop {
 	if rightIndexTrigger > 0.8
 		Vibrate(1, 1000)
 
-	if IsPressed(ovrX)
-		SetTrackingYaw(180)
-	if IsReleased(ovrX)
-		RecenterTrackingYaw()
+	if IsPressed(ovrLTrigger)
+		HideOverlay(leftOverlay)
+	if IsReleased(ovrLTrigger)
+		ShowOverlay(leftOverlay)
 
-    ; Get button states. 
+	if IsPressed(ovrRTrigger)
+		HideOverlay(rightOverlay)
+	if IsReleased(ovrRTrigger)
+		ShowOverlay(rightOverlay)
+    
+	; Get button states. 
 	lx := leftX*50+50
 	ly := leftY*50+50
 	rx := rightX*50+50

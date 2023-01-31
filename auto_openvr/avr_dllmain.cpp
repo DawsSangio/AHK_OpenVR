@@ -358,6 +358,17 @@ extern "C"
 		return handle;
 	}
 
+	__declspec(dllexport) void ShowOverlay(VROverlayHandle_t handle)
+	{
+		VROverlay()->ShowOverlay(handle);
+	}
+
+	__declspec(dllexport) void HideOverlay(VROverlayHandle_t handle)
+	{
+		VROverlay()->HideOverlay(handle);
+	}
+
+
 	// Axis
 	__declspec(dllexport) float getAxis(unsigned int axis)
 	{
