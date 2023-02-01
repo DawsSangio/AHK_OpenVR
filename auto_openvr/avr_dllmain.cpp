@@ -369,6 +369,10 @@ extern "C"
 		VROverlay()->HideOverlay(handle);
 	}
 
+	__declspec(dllexport) void SetOverlayAlpha(VROverlayHandle_t handle, float value)
+	{
+		VROverlay()->SetOverlayAlpha(handle,value);
+	}
 
 	// Axis
 	__declspec(dllexport) float getAxis(unsigned int axis)

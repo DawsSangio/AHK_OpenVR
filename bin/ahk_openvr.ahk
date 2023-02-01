@@ -95,6 +95,7 @@ Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJ
 Func_CreateOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "CreateOverlay", "Ptr")
 Func_ShowOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "ShowOverlay", "Ptr")
 Func_HideOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "HideOverlay", "Ptr")
+Func_SetOverlayAlpha := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "SetOverlayAlpha", "Ptr")
 
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
@@ -360,4 +361,10 @@ HideOverlay(overlay)
 {
 	global Func_HideOverlay
 	DllCall(Func_HideOverlay, "UInt64", overlay)
+}
+
+SetOverlayAlpha(overlay,value)
+{
+	global Func_SetOverlayAlpha
+	DllCall(Func_SetOverlayAlpha, "UInt64", overlay, "Float", value)
 }
