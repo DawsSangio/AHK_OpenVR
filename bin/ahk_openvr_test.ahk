@@ -54,7 +54,7 @@ Gui, Show
 Poll()
 RecenterTrackingOrigin()
 
-leftOverlay := CreateOverlay("circle.png",0)
+leftOverlay := CreateOverlay("circle2.png",0)
 rightOverlay := CreateOverlay("circle.png",1)
 
 Loop {
@@ -87,18 +87,18 @@ Loop {
 	if rightIndexTrigger > 0.8
 		Vibrate(1, 1000)
 
-	if IsPressed(ovrLTrigger)
-		HideOverlay(leftOverlay)
-	if IsReleased(ovrLTrigger)
-		ShowOverlay(leftOverlay)
+	;if IsPressed(ovrLTrigger)
+	;	HideOverlay(leftOverlay)
+	;if IsReleased(ovrLTrigger)
+	;	ShowOverlay(leftOverlay)
 
 	if IsPressed(ovrRTrigger)
 		HideOverlay(rightOverlay)
 	if IsReleased(ovrRTrigger)
 		ShowOverlay(rightOverlay)
 
-	SetOverlayAlpha(leftOverlay,leftIndexTrigger)
-	SetOverlayAlpha(rightOverlay,rightIndexTrigger)
+	SetOverlayAlpha(leftOverlay,1-leftIndexTrigger)
+	;SetOverlayAlpha(rightOverlay,rightIndexTrigger)
 
 	If IsPressed(ovrX)
 		SetTrackingYaw(90)
