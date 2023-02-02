@@ -96,7 +96,15 @@ Loop {
 		HideOverlay(rightOverlay)
 	if IsReleased(ovrRTrigger)
 		ShowOverlay(rightOverlay)
-    
+
+	SetOverlayAlpha(leftOverlay,leftIndexTrigger)
+	SetOverlayAlpha(rightOverlay,rightIndexTrigger)
+
+	If IsPressed(ovrX)
+		SetTrackingYaw(90)
+    If IsReleased(ovrX)
+		RecenterTrackingYaw()
+
 	; Get button states. 
 	lx := leftX*50+50
 	ly := leftY*50+50
