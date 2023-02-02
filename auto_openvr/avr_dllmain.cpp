@@ -310,10 +310,16 @@ extern "C"
 	// NeckSaver similar
 	__declspec(dllexport) void setTrackingYaw(float yaw)
 	{
-		Matrix4 mx4 = ConvertOpenVRMatrixToMatrix4(zeroSeatedpose);
-		mx4.rotateX(yaw);
-		HmdMatrix34_t newSeatedPose = ConvertMatrix4ToOpenVRMatrix34(mx4);
+		float angleR = yaw * M_PI / 180.0;
+		float c = std::cosf(angleR);
+		float s = std::sinf(angleR);;
+		HmdMatrix34_t newSeatedPose =
+		{ zeroSeatedpose.m[0][0]*c,  zeroSeatedpose.m[0][1], zeroSeatedpose.m[0][2]*s, zeroSeatedpose.m[0][3],
+		  zeroSeatedpose.m[1][0],    zeroSeatedpose.m[1][1], zeroSeatedpose.m[1][2],   zeroSeatedpose.m[1][3],
+		  zeroSeatedpose.m[2][0]*-s, zeroSeatedpose.m[2][1], zeroSeatedpose.m[2][2]*c, zeroSeatedpose.m[2][3]};
+		
 		VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&newSeatedPose);
+		VRChaperoneSetup()->ShowWorkingSetPreview();
 	}
 
 	__declspec(dllexport) void setTrackingYawToZero()
