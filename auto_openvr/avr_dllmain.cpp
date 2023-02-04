@@ -154,6 +154,7 @@ extern "C"
 	// Initialise the OpenVR session
 	__declspec(dllexport) int initOpenVR()
 	{
+		
 		EVRInitError m_eLastHmdError;
 
 		m_pHMD = VR_Init(&m_eLastHmdError, vr::VRApplication_Background);
@@ -313,24 +314,36 @@ extern "C"
 		float angleR = yaw * M_PI / 180.0;
 		float c = std::cosf(angleR);
 		float s = std::sinf(angleR);;
-	/*	HmdMatrix34_t newSeatedPose =
-		{ zeroSeatedpose.m[0][0]*c,  zeroSeatedpose.m[0][1], zeroSeatedpose.m[0][2]*s, zeroSeatedpose.m[0][3],
-		  zeroSeatedpose.m[1][0],    zeroSeatedpose.m[1][1], zeroSeatedpose.m[1][2],   zeroSeatedpose.m[1][3],
-		  zeroSeatedpose.m[2][0]*-s, zeroSeatedpose.m[2][1], zeroSeatedpose.m[2][2]*c, zeroSeatedpose.m[2][3]};*/
 				
 		HmdMatrix34_t newSeatedPose = {
-			0.0f, 0.0f, 1.0f, 0.0f,
+		   -1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
-		   -1.0f, 0.0f, 0.0f, 0.0f
+		    0.0f, 0.0f,-1.0f, 0.0f
 		};
-		
-		VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&newSeatedPose);
+		ETrackingUniverseOrigin trakingSpace = VRCompositor()->GetTrackingSpace();
+
+		if (trakingSpace == TrackingUniverseSeated)
+			VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&newSeatedPose);
+		else if (trakingSpace == TrackingUniverseStanding)
+			VRChaperoneSetup()->SetWorkingStandingZeroPoseToRawTrackingPose(&newSeatedPose);
+		else
+			return;
+
 		VRChaperoneSetup()->ShowWorkingSetPreview();
 	}
 
 	__declspec(dllexport) void setTrackingYawToZero()
 	{
-		VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&zeroSeatedpose);
+		ETrackingUniverseOrigin trakingSpace = VRCompositor()->GetTrackingSpace();
+
+		if (trakingSpace == TrackingUniverseSeated)
+			VRChaperoneSetup()->SetWorkingSeatedZeroPoseToRawTrackingPose(&zeroSeatedpose);
+		else if (trakingSpace == TrackingUniverseStanding)
+			VRChaperoneSetup()->SetWorkingStandingZeroPoseToRawTrackingPose(&zeroSeatedpose);
+		else
+			return;
+
+		VRChaperoneSetup()->ShowWorkingSetPreview();
 	}
 
 	// Overlay helpers
