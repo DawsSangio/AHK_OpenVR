@@ -487,7 +487,7 @@ extern "C"
 		}
 	}
 
-	__declspec(dllexport) float reached(unsigned int axis, float value)
+	__declspec(dllexport) int reached(unsigned int axis, float value)
 	{
 		if (m_pHMD)
 		{
