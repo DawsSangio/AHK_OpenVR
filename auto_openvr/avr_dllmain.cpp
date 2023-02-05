@@ -54,10 +54,10 @@ HmdQuaternionf_t GetQuatRotation(vr::HmdMatrix34_t matrix)
 {
 	HmdQuaternionf_t q;
 
-	q.w = sqrt(fmax(0, 1 + matrix.m[0][0] + matrix.m[1][1] + matrix.m[2][2])) / 2;
-	q.x = sqrt(fmax(0, 1 + matrix.m[0][0] - matrix.m[1][1] - matrix.m[2][2])) / 2;
-	q.y = sqrt(fmax(0, 1 - matrix.m[0][0] + matrix.m[1][1] - matrix.m[2][2])) / 2;
-	q.z = sqrt(fmax(0, 1 - matrix.m[0][0] - matrix.m[1][1] + matrix.m[2][2])) / 2;
+	q.w = sqrt(fmaxf(0, 1 + matrix.m[0][0] + matrix.m[1][1] + matrix.m[2][2])) / 2;
+	q.x = sqrt(fmaxf(0, 1 + matrix.m[0][0] - matrix.m[1][1] - matrix.m[2][2])) / 2;
+	q.y = sqrt(fmaxf(0, 1 - matrix.m[0][0] + matrix.m[1][1] - matrix.m[2][2])) / 2;
+	q.z = sqrt(fmaxf(0, 1 - matrix.m[0][0] - matrix.m[1][1] + matrix.m[2][2])) / 2;
 	q.x = copysign(q.x, matrix.m[2][1] - matrix.m[1][2]);
 	q.y = copysign(q.y, matrix.m[0][2] - matrix.m[2][0]);
 	q.z = copysign(q.z, matrix.m[1][0] - matrix.m[0][1]);
@@ -311,7 +311,7 @@ extern "C"
 	// NeckSaver similar
 	__declspec(dllexport) void setTrackingYaw(float yaw)
 	{
-		float angleR = yaw * M_PI / 180.0;
+		float angleR = yaw * M_PI / 180.0f;
 		float c = std::cosf(angleR);
 		float s = std::sinf(angleR);;
 				
