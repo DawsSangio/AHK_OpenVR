@@ -366,7 +366,7 @@ extern "C"
 		vr::HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, -1.0f, 0.0f, 0.05f
+			0.0f,-1.0f, 0.0f, 0.0f
 		};
 		switch (controller)
 		{
