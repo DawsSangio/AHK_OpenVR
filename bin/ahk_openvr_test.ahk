@@ -56,6 +56,7 @@ RecenterTrackingOrigin()
 
 leftOverlay := CreateOverlay("circle2.png",0)
 rightOverlay := CreateOverlay("circle.png",1)
+fixOverlay := CreateFixOverlay("spot","circle2.png",-0.016027,-0.126619,-0.507216,0.1)
 
 Loop {
     ; Grab the latest Oculus input state (Touch, Remote and Xbox One).

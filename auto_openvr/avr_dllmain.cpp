@@ -384,6 +384,28 @@ extern "C"
 		return handle;
 	}
 
+	__declspec(dllexport) VROverlayHandle_t CreateFixOverlay(const char* name, const char* overlayImage, float x, float y , float z, float width)
+	{
+		VROverlayHandle_t handle;
+		std::string key = name;
+		key.append("_key");
+		VROverlay()->CreateOverlay(key.c_str(), name, &handle); /* key has to be unique and different from name */
+		VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
+		VROverlay()->SetOverlayWidthInMeters(handle, width);
+		VROverlay()->ShowOverlay(handle);
+
+		vr::HmdMatrix34_t transform = {
+			1.0f, 0.0f, 0.0f, x,
+			0.0f, 1.0f, 0.0f, y,
+			0.0f, 0.0f, 1.0f, z
+		};
+
+		VROverlay()->SetOverlayTransformAbsolute(handle, TrackingUniverseSeated, &transform);
+		
+		return handle;
+	}
+
+
 	__declspec(dllexport) void ShowOverlay(VROverlayHandle_t handle)
 	{
 		VROverlay()->ShowOverlay(handle);
