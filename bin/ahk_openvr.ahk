@@ -98,6 +98,7 @@ Func_ShowOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "ShowOve
 Func_HideOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "HideOverlay", "Ptr")
 Func_SetOverlayImage := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "SetOverlayImage", "Ptr")
 Func_SetOverlayAlpha := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "SetOverlayAlpha", "Ptr")
+Func_DeleteOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "DeleteOverlay", "Ptr")
 
 Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "sendRawMouseMove", "Ptr")
 
@@ -383,4 +384,10 @@ SetOverlayAlpha(overlay,value)
 {
 	global Func_SetOverlayAlpha
 	DllCall(Func_SetOverlayAlpha, "UInt64", overlay, "Float", value)
+}
+
+DeleteOverlay(overlay)
+{
+	global Func_DeleteOverlay
+	DllCall(Func_DeleteOverlay, "UInt64", overlay)
 }
