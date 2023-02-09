@@ -352,26 +352,46 @@ extern "C"
 		if (controller > 2)
 			return 0;
 
-		VROverlayError ov_error;
+		for (TrackedDeviceIndex_t unDevice = 0; unDevice < vr::k_unMaxTrackedDeviceCount; unDevice++)
+		{
+			ETrackedDeviceClass trackedDeviceClass = VRSystem()->GetTrackedDeviceClass(unDevice);
+			switch (trackedDeviceClass)
+			{
+				case ETrackedDeviceClass::TrackedDeviceClass_Controller:
+				ETrackedControllerRole trackedControllerRole = vr::VRSystem()->GetControllerRoleForTrackedDeviceIndex(unDevice);
+				switch (trackedControllerRole)
+				{
+					case TrackedControllerRole_LeftHand:
+					left_index = unDevice;
+					break;
+
+					case TrackedControllerRole_RightHand:
+					right_index = unDevice;
+					break;
+				}
+				break;
+			}
+		}
+
 		VROverlayHandle_t handle;
 		std::string name = overlayImage;
 		std::string key = overlayImage;
 		name.append("_name");
 		key.append(std::to_string(controller));
-		ov_error = VROverlay()->CreateOverlay(key.c_str(), name.c_str(), &handle); /* key has to be unique and different from name */
-		ov_error = VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
-		ov_error = VROverlay()->SetOverlayWidthInMeters(handle, 0.1f);
-		ov_error = VROverlay()->ShowOverlay(handle);
+		VROverlay()->CreateOverlay(key.c_str(), name.c_str(), &handle); /* key has to be unique and different from name */
+		VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
+		VROverlay()->SetOverlayWidthInMeters(handle, 0.1f);
+		VROverlay()->ShowOverlay(handle);
 
 		vr::HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
 			0.0f,-1.0f, 0.0f, 0.0f
 		};
+
 		switch (controller)
 		{
 		case 2:
-
 			break;
 		case 0:
 			VROverlay()->SetOverlayTransformTrackedDeviceRelative(handle, left_index, &transform); 
