@@ -104,11 +104,11 @@ Func_sendRawMouseMove := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "se
 
 ; Init OpenVR
 ; Use specific HMD model to initialize correct axis and buttons assignment:
-; 0 = Oculus
-; 1 = Index
-; 2 = WMR touchpad gen 1
-; 3 = WMR button gen 2 (HP)
-; 4 = HTC Vive Wands
+; 1 = Oculus
+; 2 = Index
+; 3 = WMR touchpad gen 1
+; 4 = WMR button gen 2 (HP)
+; 5 = HTC Vive Wands
 InitOpenVR(HMDmodel)
 {
 	global Func_initOpenvr
@@ -120,7 +120,7 @@ InitOpenVR(HMDmodel)
 	}
 	Else
 	{
-		if (HMDmodel = 0) ; Oculus touch
+		if (HMDmodel = 1) ; Oculus touch
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 
@@ -132,7 +132,7 @@ InitOpenVR(HMDmodel)
 			AxisYLeft := 2               ; 0.y
 			AxisYRight := 3              ; 0.y
 		}
-		else if (HMDmodel = 1) ; Valve Index
+		else if (HMDmodel = 2) ; Valve Index
 		{
 			ovrA       := 4
 			ovrB       := 2
@@ -149,7 +149,7 @@ InitOpenVR(HMDmodel)
 			AxisYLeft := 2               ; 0.y
 			AxisYRight := 3              ; 0.y
 		}
-		else if (HMDmodel = 2) ; WMR gen 1 w/touchpad
+		else if (HMDmodel = 3) ; WMR gen 1 w/touchpad
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 
@@ -164,7 +164,7 @@ InitOpenVR(HMDmodel)
 			AxisYPadLeft := 2            ; 0.y
 			AxisYPadRight := 3           ; 0.y
 		}
-		else if (HMDmodel = 3)  ; WMR gen 2 w/stick only
+		else if (HMDmodel = 4)  ; WMR gen 2 w/stick only
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 
@@ -175,7 +175,7 @@ InitOpenVR(HMDmodel)
 			AxisYRight := 3              ; 0.y
 
 		}
-		else if (HMDmodel = 4) ; VIVE Wands
+		else if (HMDmodel = 5) ; VIVE Wands
 		{
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 

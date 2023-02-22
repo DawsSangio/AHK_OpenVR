@@ -1,23 +1,28 @@
 #include ahk_openvr.ahk
 
-InitOpenVR(0)
-
+;InitOpenVR(0)
 Gui, Color, White
+Gui, Add, DropDownList, vVendor AltSubmit, Oculus/Pico||Index|WMR gen1|WMR gen2|Vive Wands|
 Gui, Font,s16, Arial  
-Gui, Add, Text,section, Left Thumbstick:
-Gui, Add, Slider, vguiLeftX
+Gui, Add, Button, x+20 w200 gStart, Start
+Gui, Add, Text,section x10, Left Thumbstick:
+Gui, Add, Slider, x+10 vguiLeftX
 Gui, Add, Slider, vguiLeftY
-Gui, Add, Text,, Left Index Trigger:
+
+Gui, Add, Text,ys, Right Thumbstick:
+Gui, Add, Slider, x+10 vguiRightX
+Gui, Add, Slider, vguiRightY
+
+Gui, Add, Text,x10, Left Index Trigger:
 Gui, Add, Slider, vguiLeftIT
 Gui, Add, Text,, Left Hand Trigger:
 Gui, Add, Slider, vguiLeftHT
-Gui, Add, Text,ys, Right Thumbstick:
-Gui, Add, Slider, vguiRightX
-Gui, Add, Slider, vguiRightY
+
 Gui, Add, Text,, Right Index Trigger:
 Gui, Add, Slider, vguiRightIT
 Gui, Add, Text,, Right Hand Trigger:
 Gui, Add, Slider, vguiRightHT
+
 Gui, Add, Text, vtb section xm, Buttons: --------------------------------------
 Gui, Add, Text, vtt, Touch: ----------------------------------------
 Gui, Add, Text, vtw, Wearing: ---------------------------------------
@@ -50,10 +55,16 @@ Gui, Add, Text, vhpz, Left Pos Z: --------------------------
 Gui, Add, Button,section xm, VibrateOn
 Gui, Add, Button,section xm, CenterTrackingOrigin
 Gui, Show
+return
+
+; ****************************************************************************************
+Start:
+Gui, Submit, NoHide
+InitOpenVR(Vendor)
+
+;RecenterTrackingOrigin()
 
 Poll()
-RecenterTrackingOrigin()
-
 leftOverlay := CreateOverlay("circle2.png",0)
 rightOverlay := CreateOverlay("circle.png",1)
 fixOverlay := CreateFixOverlay("spot","circle2.png",-0.016027,-0.126619,-0.507216,0.1)
@@ -264,6 +275,7 @@ Loop {
 	
     Sleep 10
 }
+return
 
 ButtonVibrateOn:
 	Vibrate(0, 2000)
@@ -277,3 +289,4 @@ ButtonCenterTrackingOrigin:
 
 GuiClose:
 ExitApp
+
