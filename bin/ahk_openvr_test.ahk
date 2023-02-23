@@ -5,27 +5,26 @@ Gui, Color, White
 Gui, Add, DropDownList, vVendor AltSubmit, Oculus/Pico||Index|WMR gen1|WMR gen2|Vive Wands|
 Gui, Font,s16, Arial  
 Gui, Add, Button, x+20 w200 gStart, Start
-Gui, Add, Text,section x10, Left Thumbstick:
-Gui, Add, Slider, x+10 vguiLeftX
-Gui, Add, Slider, vguiLeftY
 
-Gui, Add, Text,ys, Right Thumbstick:
-Gui, Add, Slider, x+10 vguiRightX
-Gui, Add, Slider, vguiRightY
+Gui, Add, Text, section x10, Left Thumbstick:
+Gui, Add, Slider,       x180 ys vguiLeftX
+Gui, Add, Slider,               vguiLeftY
+Gui, Add, Text,              ys ,Right Thumbstick:
+Gui, Add, Slider,       x620 ys vguiRightX
+Gui, Add, Slider,               vguiRightY
 
-Gui, Add, Text,x10, Left Index Trigger:
-Gui, Add, Slider, vguiLeftIT
-Gui, Add, Text,, Left Hand Trigger:
-Gui, Add, Slider, vguiLeftHT
+Gui, Add, Text, section x10     ,Left Trigger:
+Gui, Add, Slider,       x180 ys vguiLeftIT
+Gui, Add, Text,              ys ,Right Trigger:
+Gui, Add, Slider,       x620 ys  vguiRightIT
 
-Gui, Add, Text,, Right Index Trigger:
-Gui, Add, Slider, vguiRightIT
-Gui, Add, Text,, Right Hand Trigger:
-Gui, Add, Slider, vguiRightHT
+Gui, Add, Text, section x10     ,Left Grip:
+Gui, Add, Slider,       x180 ys vguiLeftHT
+Gui, Add, Text,              ys ,Right Grip:
+Gui, Add, Slider,       x620 ys vguiRightHT
 
 Gui, Add, Text, vtb section xm, Buttons: --------------------------------------
 Gui, Add, Text, vtt, Touch: ----------------------------------------
-Gui, Add, Text, vtw, Wearing: ---------------------------------------
 Gui, Add, Text,section, Left Yaw Pitch Roll:
 Gui, Add, Slider, vguiLYaw
 Gui, Add, Slider, vguiLPitch
