@@ -99,18 +99,18 @@ HmdMatrix34_t ConvertMatrix4ToOpenVRMatrix34(Matrix4 matPose)
  
 // Button id                      // AHK
 //k_EButton_System = 0,           // 
-//k_EButton_ApplicationMenu = 1,  // 2  Oculus B
-//k_EButton_Grip = 2,             // 4  Oculus Grip
+//k_EButton_ApplicationMenu = 1,  // 2  Oculus B			/ Index B
+//k_EButton_Grip = 2,             // 4  Oculus Grip			/ Index A
 //k_EButton_DPad_Left = 3,        // 
 //k_EButton_DPad_Up = 4,          // 
 //k_EButton_DPad_Right = 5,       // 
 //k_EButton_DPad_Down = 6,        // 
 //k_EButton_A = 7,                // 1  Oculus A
 //k_EButton_ProximitySensor = 31, // 
-//k_EButton_Axis0 = 32,           // 5  Oculus joyThumb
-//k_EButton_Axis1 = 33,           // 3  Oculus Trigger   
-//k_EButton_Axis2 = 34,           //   
-//k_EButton_Axis3 = 35,           // 
+//k_EButton_Axis0 = 32,           // 5  Oculus JoyThumb		/ Index TouchPad
+//k_EButton_Axis1 = 33,           // 3  Oculus Trigger		/ Index Trigger 
+//k_EButton_Axis2 = 34,           //
+//k_EButton_Axis3 = 35,           // 6						/ Index JoyThumb
 //k_EButton_Axis4 = 36,           //
 //	aliases for well known controllers
 //k_EButton_SteamVR_Touchpad = k_EButton_Axis0,
@@ -142,7 +142,11 @@ EVRButtonId GetButtonID(unsigned int button)
 		break;
 	case 5:
 	case 500:
-		return k_EButton_Axis0;           // Oculus TumbStick - Steam TouchPad
+		return k_EButton_Axis0;           // Oculus TumbStick - Index TouchPad
+		break;
+	case 6:
+	case 600:
+		return k_EButton_Axis3;           // Oculus TumbStick - Index TouchPad
 		break;
 	}
 }

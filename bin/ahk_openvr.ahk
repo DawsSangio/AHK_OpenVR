@@ -134,10 +134,17 @@ InitOpenVR(HMDmodel)
 		}
 		else if (HMDmodel = 2) ; Valve Index
 		{
-			ovrA       := 4
-			ovrB       := 2
-			ovrX       := 400
-			ovrY       := 200
+			ovrA         := 4
+			ovrB         := 2
+			ovrRTrigger  := 3
+			ovrRGrip     := 0
+			ovrRThumb    := 6 
+
+			ovrX         := 400
+			ovrY         := 200
+			ovrLTrigger  := 300
+			ovrLGrip     := 0
+			ovrLThumb    := 600  
 			
 			AxisIndexTriggerLeft := 4    ; 1.x
 			AxisIndexTriggerRight := 5   ; 1.x 
