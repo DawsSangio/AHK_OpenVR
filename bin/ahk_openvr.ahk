@@ -92,7 +92,7 @@ Func_initvJoy := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "initvJoy",
 Func_setvJoyAxis := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyAxis", "Ptr")
 Func_setvJoyButton := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "setvJoyButton", "Ptr")
 
-Func_CreateOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "CreateOverlay", "Ptr")
+Func_CreateHandOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "CreateHandOverlay", "Ptr")
 Func_CreateFixOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "CreateFixOverlay", "Ptr")
 Func_ShowOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "ShowOverlay", "Ptr")
 Func_HideOverlay := DllCall("GetProcAddress", "Ptr", AOTModule, "AStr", "HideOverlay", "Ptr")
@@ -354,11 +354,11 @@ SendRawMouseMove(x, y, z)
 }
 
 
-;  Create Overlay with a image.png. Return Overlay handle
-CreateOverlay(image,controller)
+;  Create Overlay with a image.png, linked to relative controller. Return Overlay handle
+CreateHandOverlay(image,controller)
 {
-	global Func_CreateOverlay
-    return DllCall(Func_CreateOverlay, "AStr", image, "UInt", controller, "UInt64")
+	global Func_CreateHandOverlay
+    return DllCall(Func_CreateHandOverlay, "AStr", image, "UInt", controller, "UInt64")
 }
 
 CreateFixOverlay(name,image,x,y,z,width)

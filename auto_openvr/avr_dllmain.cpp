@@ -203,7 +203,7 @@ extern "C"
 			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, left_index, &left_state, sizeof(left_state), &left_pose);
 			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, right_index, &right_state, sizeof(right_state), &right_pose);
 
-			float Ztraspose = 0.05;
+			float Ztraspose = -0.05;
 	/*		HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
@@ -364,7 +364,7 @@ extern "C"
 	}
 
 	// Overlay helpers
-	__declspec(dllexport) VROverlayHandle_t CreateOverlay(const char* overlayImage, unsigned int controller)
+	__declspec(dllexport) VROverlayHandle_t CreateHandOverlay(const char* overlayImage, unsigned int controller)
 	{
 		if (controller > 2)
 			return 0;

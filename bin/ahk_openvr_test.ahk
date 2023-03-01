@@ -64,8 +64,8 @@ InitOpenVR(Vendor)
 ;RecenterTrackingOrigin()
 
 Poll()
-leftOverlay := CreateOverlay("circle2.png",0)
-rightOverlay := CreateOverlay("circle.png",1)
+leftOverlay := CreateHandOverlay("circle2.png",0)
+rightOverlay := CreateHandOverlay("circle.png",1)
 fixOverlay := CreateFixOverlay("spot","circle2.png",-0.016027,-0.126619,-0.507216,0.1)
 
 Loop {
