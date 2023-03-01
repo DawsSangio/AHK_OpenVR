@@ -203,17 +203,17 @@ extern "C"
 			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, left_index, &left_state, sizeof(left_state), &left_pose);
 			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, right_index, &right_state, sizeof(right_state), &right_pose);
 
-			float Ztraspose = -0.05;
-	/*		HmdMatrix34_t transform = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, -0.05f
-			};*/
+	//		float Ztraspose = 0.05;
+	///*		HmdMatrix34_t transform = {
+	//		1.0f, 0.0f, 0.0f, 0.0f,
+	//		0.0f, 1.0f, 0.0f, 0.0f,
+	//		0.0f, 0.0f, 1.0f, -0.05f
+	//		};*/
 
-			left_pose.mDeviceToAbsoluteTracking.m[0][2] *= Ztraspose;
-			left_pose.mDeviceToAbsoluteTracking.m[1][2] *= Ztraspose;
-			left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
-			left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
+	//		left_pose.mDeviceToAbsoluteTracking.m[0][2] *= Ztraspose;
+	//		left_pose.mDeviceToAbsoluteTracking.m[1][2] *= Ztraspose;
+	//		left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
+	//		left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
 
 		}
 	}
