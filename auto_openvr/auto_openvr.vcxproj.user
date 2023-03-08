@@ -2,14 +2,14 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommand>C:\Program Files\AutoHotkey\AutoHotkey.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>c:\Users\daws7\OneDrive\Documenti\Computer\Driver\Autohotkey\OpenVR\IL2_AirCockpit_HS_creator_S_3.ahk</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>IL2_AirCockpit_HS_creator_S_3.ahk</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommand>C:\Program Files\AutoHotkey\AutoHotkey.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>c:\Users\daws7\OneDrive\Documenti\Computer\Driver\Autohotkey\OpenVR\IL2_AirCockpit_HS_creator_S_3.ahk</LocalDebuggerCommandArguments>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments>IL2_AirCockpit_HS_creator_S_3.ahk</LocalDebuggerCommandArguments>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>
