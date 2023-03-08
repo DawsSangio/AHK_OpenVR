@@ -33,6 +33,8 @@ VRControllerState_t right_last_state;
 
 // HMD and controlelr pose
 TrackedDevicePose_t hmd_pose;
+TrackedDevicePose_t orig_left_pose;
+TrackedDevicePose_t orig_right_pose;
 TrackedDevicePose_t left_pose;
 TrackedDevicePose_t right_pose;
 
@@ -200,21 +202,18 @@ extern "C"
 			}
 		
 			VRSystem()->GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin::TrackingUniverseSeated, 0, &hmd_pose, 1);
-			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, left_index, &left_state, sizeof(left_state), &left_pose);
-			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, right_index, &right_state, sizeof(right_state), &right_pose);
+			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, left_index, &left_state, sizeof(left_state), &orig_left_pose);
+			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, right_index, &right_state, sizeof(right_state), &orig_right_pose);
 
-	//		float Ztraspose = 0.05;
-	///*		HmdMatrix34_t transform = {
-	//		1.0f, 0.0f, 0.0f, 0.0f,
-	//		0.0f, 1.0f, 0.0f, 0.0f,
-	//		0.0f, 0.0f, 1.0f, -0.05f
-	//		};*/
+			// Apply transform to place the origin of the controller 5cm closer to the hand, along z axis
+			vr::HmdMatrix34_t transform = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.05f
+			};
 
-	//		left_pose.mDeviceToAbsoluteTracking.m[0][2] *= Ztraspose;
-	//		left_pose.mDeviceToAbsoluteTracking.m[1][2] *= Ztraspose;
-	//		left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
-	//		left_pose.mDeviceToAbsoluteTracking.m[2][2] *= Ztraspose;
-
+			VRSystem()->ApplyTransform(&left_pose, &orig_left_pose, &transform);
+			VRSystem()->ApplyTransform(&right_pose, &orig_right_pose, &transform);
 		}
 	}
 	
@@ -403,7 +402,7 @@ extern "C"
 		vr::HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f,-1.0f, 0.0f, 0.0f
+			0.0f,-1.0f, 0.0f, 0.05f
 		};
 
 		switch (controller)
