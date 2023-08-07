@@ -59,7 +59,9 @@ return
 ; ****************************************************************************************
 Start:
 Gui, Submit, NoHide
-InitOpenVR(Vendor)
+initerror := InitOpenVR(Vendor)
+If (initerror = 0)
+	return
 
 ;RecenterTrackingOrigin()
 
