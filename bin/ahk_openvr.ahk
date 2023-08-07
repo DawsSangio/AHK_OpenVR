@@ -116,7 +116,7 @@ InitOpenVR(HMDmodel)
 	if result = 0
 	{
 		MsgBox, SteamVR is not running. Please start SteamVR before.
-		ExitApp
+		return result
 	}
 	Else
 	{
