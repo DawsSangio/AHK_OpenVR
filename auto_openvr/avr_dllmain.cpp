@@ -206,10 +206,16 @@ extern "C"
 			VRSystem()->GetControllerStateWithPose(ETrackingUniverseOrigin::TrackingUniverseSeated, right_index, &right_state, sizeof(right_state), &orig_right_pose);
 
 			// Apply transform to place the origin of the controller 5cm closer to the hand, along z axis
-			vr::HmdMatrix34_t transform = {
+	/*		vr::HmdMatrix34_t transform = {
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.05f
+			};*/
+
+			vr::HmdMatrix34_t transform = {
+			1.0f, 0.0f,		  0.0f,			0.0f,
+			0.0f, 0.7071068f, -0.7071068f,	0.0f,
+			0.0f, 0.7071068f, 0.7071068f,	0.05f
 			};
 
 			VRSystem()->ApplyTransform(&left_pose, &orig_left_pose, &transform);
