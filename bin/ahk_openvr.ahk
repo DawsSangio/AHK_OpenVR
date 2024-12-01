@@ -355,10 +355,10 @@ SendRawMouseMove(x, y, z)
 
 
 ;  Create Overlay with a image.png, linked to relative controller. Return Overlay handle
-CreateHandOverlay(image,controller)
+CreateHandOverlay(image,controller,width)
 {
 	global Func_CreateHandOverlay
-    return DllCall(Func_CreateHandOverlay, "AStr", image, "UInt", controller, "UInt64")
+    return DllCall(Func_CreateHandOverlay, "AStr", image, "UInt", controller, "Float", width, "UInt64")
 }
 
 CreateFixOverlay(name,image,x,y,z,width)

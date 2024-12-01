@@ -369,7 +369,7 @@ extern "C"
 	}
 
 	// Overlay helpers
-	__declspec(dllexport) VROverlayHandle_t CreateHandOverlay(const char* overlayImage, unsigned int controller)
+	__declspec(dllexport) VROverlayHandle_t CreateHandOverlay(const char* overlayImage, unsigned int controller, float width)
 	{
 		if (controller > 2)
 			return 0;
@@ -402,7 +402,7 @@ extern "C"
 		key.append(std::to_string(controller));
 		VROverlay()->CreateOverlay(key.c_str(), name.c_str(), &handle); /* key has to be unique and different from name */
 		VROverlay()->SetOverlayFromFile(handle, std::filesystem::current_path().append(overlayImage).string().c_str());
-		VROverlay()->SetOverlayWidthInMeters(handle, 0.1f);
+		VROverlay()->SetOverlayWidthInMeters(handle, width);
 		VROverlay()->ShowOverlay(handle);
 
 		vr::HmdMatrix34_t transform = {
@@ -446,7 +446,6 @@ extern "C"
 		
 		return handle;
 	}
-
 
 	__declspec(dllexport) void ShowOverlay(VROverlayHandle_t handle)
 	{
